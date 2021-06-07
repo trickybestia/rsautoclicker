@@ -1,0 +1,21 @@
+[package]
+name = "rsautoclicker"
+version = "0.1.0"
+authors = ["trickybestia <trickybestia@gmail.com>"]
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+directories = { version = "3.0" }
+winapi = { version = "0.3", features = ["winuser", "libloaderapi"] }
+lazy_static = { version = "1.4.0" }
+nwg = {version = "^1.0.11", package = "native-windows-gui", features = ["combobox", "tooltip", "notice"]}
+nwd = {version = "^1.0.3", package = "native-windows-derive"}
+strum = { version = "0.21", features = ["derive"] }
+num-traits = { version = "0.2" }
+num-derive = { version = "0.3" }
+
+[build-dependencies]
+winres = "0.1"
