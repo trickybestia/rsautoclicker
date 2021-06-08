@@ -34,7 +34,7 @@ use std::sync::Mutex;
 fn main() {
     let settings = Arc::new(Mutex::new(Settings::load_or_default()));
     let clicker = Clicker::new(settings.lock().unwrap().clone());
-    let _hook = {
+    let keyboard_hook = Arc::new(Mutex::new({
         let settings = settings.clone();
         let clicker = clicker.clone();
         KeyboardHook::new(Arc::new(move |vk_code: u32| {
@@ -47,7 +47,8 @@ fn main() {
                 }
             }
         }))
-    };
+    }));
+    keyboard_hook.lock().unwrap().start();
 
     nwg::init().unwrap();
     nwg::Font::set_global_family("Segoe UI").unwrap();
@@ -62,10 +63,7 @@ fn main() {
                 clicker.set_settings(changed_settings.clone());
             }
         }),
-        Box::new({
-            let clicker = clicker.clone();
-            move || clicker.stop()
-        }),
+        keyboard_hook.clone(),
     ))
     .unwrap();
 

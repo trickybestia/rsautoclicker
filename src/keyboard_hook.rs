@@ -31,16 +31,12 @@ lazy_static! {
 
 pub struct KeyboardHook {
     callback: Arc<dyn Fn(u32) + Send + Sync + 'static>,
+    is_working: bool,
 }
 
 impl Drop for KeyboardHook {
     fn drop(&mut self) {
-        let mut lock = CALLBACKS.lock().unwrap();
-        let position = lock
-            .iter()
-            .position(|callback| Arc::as_ptr(callback) == Arc::as_ptr(&self.callback))
-            .unwrap();
-        lock.remove(position);
+        self.stop();
     }
 }
 
@@ -80,8 +76,29 @@ impl KeyboardHook {
 
     pub fn new(callback: Arc<dyn Fn(u32) + Send + Sync + 'static>) -> Self {
         Self::init();
-        CALLBACKS.lock().unwrap().push(callback.clone());
-        Self { callback }
+        Self {
+            callback,
+            is_working: false,
+        }
+    }
+
+    pub fn start(&mut self) {
+        if !self.is_working {
+            self.is_working = true;
+            CALLBACKS.lock().unwrap().push(self.callback.clone());
+        }
+    }
+
+    pub fn stop(&mut self) {
+        if self.is_working {
+            self.is_working = false;
+            let mut lock = CALLBACKS.lock().unwrap();
+            let position = lock
+                .iter()
+                .position(|callback| Arc::as_ptr(callback) == Arc::as_ptr(&self.callback))
+                .unwrap();
+            lock.remove(position);
+        }
     }
 
     unsafe extern "system" fn callback(n_code: i32, w_param: usize, l_param: isize) -> isize {

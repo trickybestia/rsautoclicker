@@ -16,10 +16,11 @@
 */
 
 use super::settings_editor::SettingsEditor;
-use crate::settings::Settings;
+use crate::{keyboard_hook::KeyboardHook, settings::Settings};
 use nwd::NwgUi;
 use nwg::{GridLayout, Icon, Menu, MenuItem, TextInput, Window};
 use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
 
 #[derive(NwgUi)]
 pub struct App {
@@ -27,7 +28,7 @@ pub struct App {
 
     on_settings_changed: Box<dyn Fn(&Settings)>,
 
-    stop_clicker: Box<dyn Fn()>,
+    keyboard_hook: Arc<Mutex<KeyboardHook>>,
 
     #[nwg_resource(source_bin: Some(include_bytes!("../../resources/icon.ico")))]
     icon: Icon,
@@ -55,12 +56,12 @@ impl App {
     pub fn new(
         settings: Settings,
         on_settings_changed: Box<dyn Fn(&Settings)>,
-        stop_clicker: Box<dyn Fn()>,
+        keyboard_hook: Arc<Mutex<KeyboardHook>>,
     ) -> Self {
         Self {
             settings: RefCell::new(settings),
             on_settings_changed,
-            stop_clicker,
+            keyboard_hook,
             icon: Default::default(),
             window: Default::default(),
             tools_menu: Default::default(),
@@ -84,12 +85,13 @@ impl App {
     }
 
     fn on_options_menu_click(&self) {
-        (self.stop_clicker)();
+        self.keyboard_hook.lock().unwrap().stop();
         self.window.set_visible(false);
         self.settings
             .replace(SettingsEditor::show(self.settings.take()));
         self.update();
         (self.on_settings_changed)(&self.settings.borrow());
         self.window.set_visible(true);
+        self.keyboard_hook.lock().unwrap().start();
     }
 }

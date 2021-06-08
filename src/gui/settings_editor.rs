@@ -123,7 +123,7 @@ impl SettingsEditor {
         self.tooltip
             .register(&self.click_activator_button, "Clicker activation key");
 
-        *self.keyboard_hook.borrow_mut() = Some(KeyboardHook::new(Arc::new({
+        let mut keyboard_hook = KeyboardHook::new(Arc::new({
             let settings = self.settings.clone();
             let is_changing_activator_key = self.is_changing_activator_key.clone();
             let sender = self.click_activator_update_text_notice.sender();
@@ -138,7 +138,9 @@ impl SettingsEditor {
                     }
                 }
             }
-        })));
+        }));
+        keyboard_hook.start();
+        *self.keyboard_hook.borrow_mut() = Some(keyboard_hook);
     }
 
     fn on_close(&self) {
