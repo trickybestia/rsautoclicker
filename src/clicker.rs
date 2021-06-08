@@ -30,7 +30,6 @@ macro_rules! status_internal {
     };
 }
 
-#[derive(Clone, Copy, Debug)]
 pub enum ClickerStatus {
     Clicking,
     Idle,

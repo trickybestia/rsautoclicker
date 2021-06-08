@@ -52,7 +52,7 @@ impl fmt::Display for ClickType {
     }
 }
 
-#[derive(Copy, Clone, Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct Settings {
     pub activation_key: Option<Keys>,
     pub click_delay: Duration,
