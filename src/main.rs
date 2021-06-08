@@ -21,6 +21,7 @@ mod clicker;
 mod gui;
 mod keyboard_hook;
 mod keys;
+mod resources;
 mod settings;
 
 use clicker::{Clicker, ClickerStatus};

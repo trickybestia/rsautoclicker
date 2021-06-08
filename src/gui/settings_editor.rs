@@ -16,6 +16,7 @@
 */
 
 use crate::keyboard_hook::KeyboardHook;
+use crate::resources::ICON;
 use crate::settings::{ClickType, Settings};
 use num_traits::FromPrimitive;
 use nwd::NwgUi;
@@ -102,9 +103,7 @@ impl SettingsEditor {
     }
 
     fn on_init(&self) {
-        self.window.set_icon(Some(
-            &Icon::from_bin(include_bytes!("../../resources/icon.ico")).unwrap(),
-        ));
+        self.window.set_icon(Some(&Icon::from_bin(ICON).unwrap()));
 
         for click_type in ClickType::iter() {
             self.click_type_selector.push(click_type);

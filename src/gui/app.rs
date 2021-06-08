@@ -16,6 +16,7 @@
 */
 
 use super::settings_editor::SettingsEditor;
+use crate::resources::ICON;
 use crate::{keyboard_hook::KeyboardHook, settings::Settings};
 use nwd::NwgUi;
 use nwg::{GridLayout, Icon, Menu, MenuItem, TextInput, Window};
@@ -30,11 +31,8 @@ pub struct App {
 
     keyboard_hook: Arc<Mutex<KeyboardHook>>,
 
-    #[nwg_resource(source_bin: Some(include_bytes!("../../resources/icon.ico")))]
-    icon: Icon,
-
-    #[nwg_control(title: "RS Autoclicker", flags: "WINDOW|VISIBLE", size: (250, 60), icon: Some(&data.icon))]
-    #[nwg_events(OnWindowClose: [App::on_close], OnInit: [App::update])]
+    #[nwg_control(title: "RS Autoclicker", flags: "WINDOW|VISIBLE", size: (250, 60))]
+    #[nwg_events(OnWindowClose: [App::on_close], OnInit: [App::on_init])]
     window: Window,
 
     #[nwg_control(text: "Tools", parent: window)]
@@ -62,13 +60,18 @@ impl App {
             settings: RefCell::new(settings),
             on_settings_changed,
             keyboard_hook,
-            icon: Default::default(),
             window: Default::default(),
             tools_menu: Default::default(),
             options_menu: Default::default(),
             layout: Default::default(),
             selected_key_text_input: Default::default(),
         }
+    }
+
+    fn on_init(&self) {
+        self.window.set_icon(Some(&Icon::from_bin(ICON).unwrap()));
+
+        self.update();
     }
 
     fn update(&self) {
