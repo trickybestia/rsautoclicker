@@ -106,9 +106,9 @@ fn click(click_type: ClickType, duration: Duration) {
     use winapi::um::winuser;
 
     let (first_event_type, second_event_type) = match click_type {
-        ClickType::LeftSingle => (winuser::MOUSEEVENTF_LEFTDOWN, winuser::MOUSEEVENTF_LEFTUP),
-        ClickType::RightSingle => (winuser::MOUSEEVENTF_RIGHTDOWN, winuser::MOUSEEVENTF_RIGHTUP),
-        ClickType::MiddleSingle => (
+        ClickType::Left => (winuser::MOUSEEVENTF_LEFTDOWN, winuser::MOUSEEVENTF_LEFTUP),
+        ClickType::Right => (winuser::MOUSEEVENTF_RIGHTDOWN, winuser::MOUSEEVENTF_RIGHTUP),
+        ClickType::Middle => (
             winuser::MOUSEEVENTF_MIDDLEDOWN,
             winuser::MOUSEEVENTF_MIDDLEUP,
         ),

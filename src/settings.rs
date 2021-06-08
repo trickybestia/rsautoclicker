@@ -27,14 +27,14 @@ use strum::EnumIter;
 
 #[derive(PartialEq, EnumIter, Copy, Clone, Deserialize, Serialize)]
 pub enum ClickType {
-    LeftSingle,
-    RightSingle,
-    MiddleSingle,
+    Left,
+    Right,
+    Middle,
 }
 
 impl Default for ClickType {
     fn default() -> Self {
-        ClickType::LeftSingle
+        ClickType::Left
     }
 }
 
@@ -44,9 +44,9 @@ impl fmt::Display for ClickType {
             f,
             "{}",
             match self {
-                ClickType::LeftSingle => "Left single",
-                ClickType::RightSingle => "Right single",
-                ClickType::MiddleSingle => "Middle single",
+                ClickType::Left => "Left",
+                ClickType::Right => "Right",
+                ClickType::Middle => "Middle",
             }
         )
     }
@@ -66,7 +66,7 @@ impl Default for Settings {
             activation_key: None,
             click_delay: Duration::from_millis(100),
             click_duration: Duration::from_millis(0),
-            click_type: ClickType::LeftSingle,
+            click_type: ClickType::Left,
         }
     }
 }
