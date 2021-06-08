@@ -47,7 +47,7 @@ pub struct App {
     #[nwg_layout(parent: window, max_row: Some(1))]
     layout: GridLayout,
 
-    #[nwg_control(readonly: true, align: HTextAlign::Center)]
+    #[nwg_control(text: "Open Tools->Options...", readonly: true, align: HTextAlign::Center)]
     #[nwg_layout_item(layout: layout, col: 0, row: 0)]
     selected_key_text_input: TextInput,
 }
